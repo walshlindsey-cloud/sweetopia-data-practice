@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Sweetopia Practice</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Tables on Planet Sweetopia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Comic Neue', cursive;
+      background-color: #0a1128;
+      background-image: radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 40px), radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 30px), radial-gradient(white, rgba(255, 255, 255, .1) 2px, transparent 40px), radial-gradient(rgba(255, 255, 255, .4), rgba(255, 255, 255, .1) 2px, transparent 30px);
+      background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+      background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+      color: #4a5568;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Galaxy nebula effect */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 35%, rgba(76, 0, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 75% 44%, rgba(255, 0, 140, 0.15) 0%, transparent 60%), radial-gradient(circle at 5% 75%, rgba(0, 247, 255, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -3px rgba(157, 23, 210, 0.4);
+      border: 3px solid #f472b6;
+      background-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 0.5rem;
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th {
+      font-size: 1.25rem;
+    }
+
+    td,
+    th {
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .btn {
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .input-field {
+      transition: all 0.2s ease;
+      font-size: 1.25rem;
+    }
+
+    .input-field:focus {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 3px rgba(249, 168, 212, 0.4);
+    }
+
+    .emoji-float {
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .big-text {
+      font-size: 1.25rem;
+    }
+
+    .candy-box {
+      background-color: #fef3c7;
+      border: 3px dashed #f59e0b;
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+
+    .candy-item {
+      display: inline-block;
+      margin: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .candy-item:hover {
+      transform: scale(1.2);
+    }
+
+    .space-ship {
+      animation: spaceship 10s linear infinite;
+    }
+
+    @keyframes spaceship {
+      0% {
+        transform: translateX(-100%) translateY(0);
+      }
+
+      25% {
+        transform: translateX(0%) translateY(-20px);
+      }
+
+      50% {
+        transform: translateX(100%) translateY(0);
+      }
+
+      75% {
+        transform: translateX(0%) translateY(20px);
+      }
+
+      100% {
+        transform: translateX(-100%) translateY(0);
+      }
+    }
+
+    .star {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.2;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .planet {
+      position: relative;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      box-shadow: 0 0 20px rgba(255, 154, 158, 0.7);
+    }
+
+    .tally-container {
+      min-height: 60px;
+      background-color: #fff5f7;
+      border: 2px dashed #f472b6;
+    }
+
+    .tally-option {
+      cursor: grab;
+      user-select: none;
+      transition: all 0.2s ease;
+      background-color: white;
+    }
+
+    .tally-option:hover {
+      transform: scale(1.05);
+    }
+
+    .tally-option:active {
+      cursor: grabbing;
+    }
+
+    .tally-option.selected {
+      box-shadow: 0 0 0 3px #f472b6;
+    }
+
+    .tally-dropzone {
+      min-height: 60px;
+      transition: all 0.2s ease;
+    }
+
+    .tally-dropzone.highlight {
+      background-color: #fce7f3;
+      box-shadow: 0 0 0 3px #f472b6;
+    }
+
+    /* Shooting star animation */
+    .shooting-star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: white;
+      box-shadow: 0 0 10px 2px white;
+      opacity: 0;
+      animation: shoot 8s infinite ease-out;
+    }
+
+    @keyframes shoot {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+      }
+
+      2% {
+        opacity: 1;
+      }
+
+      10% {
+        transform: translate(300px, 300px) rotate(45deg);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translate(300px, 300px) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Shooting stars -->
+  <div class="shooting-star" style="top: 10%; left: 20%; animation-delay: 1s;"></div>
+  <div class="shooting-star" style="top: 30%; left: 80%; animation-delay: 3s;"></div>
+  <div class="shooting-star" style="top: 60%; left: 40%; animation-delay: 5s;"></div>
+  <div class="shooting-star" style="top: 80%; left: 70%; animation-delay: 7s;"></div>
+  <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <!-- Header -->
+    <header class="text-center mb-8">
+      <div class="relative inline-block">
+        <div class="planet w-32 h-32 mx-auto mb-4">
+          <div class="absolute top-5 left-5 w-8 h-8 rounded-full bg-pink-300"></div>
+          <div class="absolute bottom-8 right-8 w-6 h-6 rounded-full bg-pink-200"></div>
+        </div>
+        <div class="space-ship absolute -top-10 -right-20"> <span class="text-4xl">🚀</span> </div>
+      </div>
+      <h1 class="text-4xl font-bold mb-2 text-pink-300">Welcome to Planet Sweetopia!</h1>
+      <p class="text-xl text-pink-200">Learning about data tables in the sweetest galaxy</p>
+    </header> <!-- Introduction Section -->
+    <section class="card bg-white p-6 mb-8">
+      <div class="flex flex-col md:flex-row items-center gap-6">
+        <div class="md:w-1/3 flex justify-center">
+          <div class="relative">
+            <!-- Data table illustration instead of graph -->
+            <div class="bg-pink-100 border-2 border-pink-400 rounded-lg p-2 w-48">
+              <div class="bg-pink-200 p-1 mb-1 rounded flex justify-between"> <span class="font-bold">🍦 Treat</span> <span class="font-bold"># Aliens</span> </div>
+              <div class="bg-white p-1 mb-1 rounded flex justify-between"> <span>🍦 Ice Cream</span> <span>6</span> </div>
+              <div class="bg-white p-1 mb-1 rounded flex justify-between"> <span>🍭 Lollipop</span> <span>4</span> </div>
+              <div class="bg-white p-1 rounded flex justify-between"> <span>🍪 Cookie</span> <span>5</span> </div>
+            </div> <span class="absolute -top-4 -right-4 text-4xl emoji-float" style="animation-delay: 0.5s">🍦</span> <span class="absolute -bottom-4 -left-4 text-4xl emoji-float" style="animation-delay: 1s">🍭</span>
+          </div>
+        </div>
+        <div class="md:w-2/3">
+          <h2 class="text-3xl font-bold text-pink-500 mb-4">Space Mission: Learn Data Tables</h2>
+          <div class="space-y-4 big-text">
+            <p>Welcome, space explorer! On Planet Sweetopia, the aliens organize all their sweet treats using data tables. A data table helps them organize information in rows and columns.</p>
+            <div class="bg-pink-50 border-l-4 border-pink-400 p-4 rounded">
+              <h3 class="font-bold text-xl text-pink-500 mb-2">Parts of a Sweetopian Data Table:</h3>
+              <ul class="list-disc pl-6 space-y-2">
+                <li><span class="font-bold text-pink-500">Headers:</span> The titles at the top that tell us what's in each column</li>
+                <li><span class="font-bold text-pink-500">Rows:</span> The lines that go across</li>
+                <li><span class="font-bold text-pink-500">Columns:</span> The lines that go up and down</li>
+              </ul>
+            </div>
+            <p>On Planet Sweetopia, data tables help aliens:</p>
+            <ul class="list-disc pl-6 space-y-1">
+              <li>Sort sweet treats into groups</li>
+              <li>Count how many treats are in each group</li>
+              <li>Compare different groups of treats</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section> <!-- Example Table Section -->
+    <section class="card bg-white p-6 mb-8">
+      <h2 class="text-3xl font-bold text-pink-500 mb-4">Example: Favorite Desserts on Sweetopia</h2>
+      <p class="big-text mb-4">Commander Sprinkles asked 15 alien students about their favorite dessert. Here's what they said:</p>
+      <p class="big-text mb-4">4 aliens liked cookies, 6 aliens liked ice cream, and 5 aliens liked cupcakes.</p>
+      <div class="table-container mb-6">
+        <table class="w-full border-2 border-pink-300">
+          <thead>
+            <tr class="bg-pink-200">
+              <th class="border-2 border-pink-300">Dessert</th>
+              <th class="border-2 border-pink-300">Tally Marks</th>
+              <th class="border-2 border-pink-300">Number of Aliens</th>
+            </tr>
+          </thead>
+          <tbody class="text-xl">
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🍪</span> <span>Cookies</span> </div>
+              </td>
+              <td class="border-2 border-pink-300"> <svg width="60" height="30" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+                  <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+                </svg> </td>
+              <td class="border-2 border-pink-300">4</td>
+            </tr>
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🍦</span> <span>Ice Cream</span> </div>
+              </td>
+              <td class="border-2 border-pink-300"> <svg width="90" height="30" viewBox="0 0 90 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+                  <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+                  <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+                </svg> </td>
+              <td class="border-2 border-pink-300">6</td>
+            </tr>
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🧁</span> <span>Cupcakes</span> </div>
+              </td>
+              <td class="border-2 border-pink-300"> <svg width="75" height="30" viewBox="0 0 75 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+                  <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+                  <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+                </svg> </td>
+              <td class="border-2 border-pink-300">5</td>
+            </tr>
+            <tr class="bg-pink-100">
+              <td class="border-2 border-pink-300 font-bold">Total</td>
+              <td class="border-2 border-pink-300"></td>
+              <td class="border-2 border-pink-300 font-bold">15</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="bg-pink-50 border-l-4 border-pink-400 p-4 rounded">
+        <h3 class="font-bold text-xl text-pink-500 mb-2">Reading the Table:</h3>
+        <p class="mb-2 big-text">We can answer questions using our table:</p>
+        <ul class="list-disc pl-6 space-y-2 big-text">
+          <li>Which dessert did most aliens like? <span class="font-bold text-pink-500">Ice Cream (6 aliens)</span></li>
+          <li>How many more aliens liked ice cream than cookies? <span class="font-bold text-pink-500">2 more aliens (6 - 4 = 2)</span></li>
+          <li>How many aliens were asked in total? <span class="font-bold text-pink-500">15 aliens</span></li>
+        </ul>
+      </div>
+    </section> <!-- Activity 1 -->
+    <section class="card bg-white p-6 mb-8">
+      <h2 class="text-3xl font-bold text-pink-500 mb-4">Activity 1: Complete the Space Cookie Table</h2>
+      <p class="big-text mb-4">Commander Cookie asked aliens about their favorite space cookies. Help complete the table!</p>
+      <p class="big-text mb-4">6 aliens liked star-shaped cookies, 4 aliens liked moon cookies, and 5 aliens liked rocket cookies.</p>
+      <div class="mb-6 bg-pink-50 p-4 rounded-lg">
+        <h3 class="font-bold text-xl text-pink-500 mb-3">Tally Mark Options:</h3>
+        <p class="mb-2">Drag the correct tally marks to each row:</p>
+        <div class="flex flex-wrap justify-center gap-4 mb-4">
+          <div class="tally-option p-2 border-2 border-pink-300 rounded-lg" draggable="true" data-value="4"> <svg width="60" height="30" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid meet">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+            <p class="text-center text-sm mt-1">4 marks</p>
+          </div>
+          <div class="tally-option p-2 border-2 border-pink-300 rounded-lg" draggable="true" data-value="5"> <svg width="75" height="30" viewBox="0 0 75 30" preserveAspectRatio="xMidYMid meet">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+            </svg>
+            <p class="text-center text-sm mt-1">5 marks</p>
+          </div>
+          <div class="tally-option p-2 border-2 border-pink-300 rounded-lg" draggable="true" data-value="6"> <svg width="90" height="30" viewBox="0 0 90 30" preserveAspectRatio="xMidYMid meet">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+              <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+            <p class="text-center text-sm mt-1">6 marks</p>
+          </div>
+        </div>
+      </div>
+      <div class="table-container mb-6">
+        <table class="w-full border-2 border-pink-300">
+          <thead>
+            <tr class="bg-pink-200">
+              <th class="border-2 border-pink-300">Cookie Type</th>
+              <th class="border-2 border-pink-300">Tally Marks</th>
+              <th class="border-2 border-pink-300">Number of Aliens</th>
+            </tr>
+          </thead>
+          <tbody class="text-xl">
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">⭐</span> <span>Star Cookies</span> </div>
+              </td>
+              <td class="border-2 border-pink-300">
+                <div class="tally-dropzone p-2 rounded-lg min-h-[60px] flex justify-center items-center" data-row="star" data-value="">
+                  <p class="text-gray-400">Drop tally marks here</p>
+                </div>
+              </td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-yellow-100 border-2 border-pink-300 rounded p-2 text-center" id="star-cookies" placeholder="?"> </td>
+            </tr>
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🌙</span> <span>Moon Cookies</span> </div>
+              </td>
+              <td class="border-2 border-pink-300">
+                <div class="tally-dropzone p-2 rounded-lg min-h-[60px] flex justify-center items-center" data-row="moon" data-value="">
+                  <p class="text-gray-400">Drop tally marks here</p>
+                </div>
+              </td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-yellow-100 border-2 border-pink-300 rounded p-2 text-center" id="moon-cookies" placeholder="?"> </td>
+            </tr>
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🚀</span> <span>Rocket Cookies</span> </div>
+              </td>
+              <td class="border-2 border-pink-300">
+                <div class="tally-dropzone p-2 rounded-lg min-h-[60px] flex justify-center items-center" data-row="rocket" data-value="">
+                  <p class="text-gray-400">Drop tally marks here</p>
+                </div>
+              </td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-yellow-100 border-2 border-pink-300 rounded p-2 text-center" id="rocket-cookies" placeholder="?"> </td>
+            </tr>
+            <tr class="bg-pink-100">
+              <td class="border-2 border-pink-300 font-bold">Total</td>
+              <td class="border-2 border-pink-300"></td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-yellow-100 border-2 border-pink-300 rounded p-2 text-center" id="total-cookies" placeholder="?"> </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-center"> <button onclick="checkTable1()" class="btn bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg text-xl font-bold"> Check My Answers </button> </div>
+      <div id="table1-feedback" class="mt-4 hidden bg-pink-50 border-2 border-pink-300 rounded-lg p-4 text-center text-xl"></div>
+    </section> <!-- Activity 2 -->
+    <section class="card bg-white p-6 mb-8">
+      <h2 class="text-3xl font-bold text-pink-500 mb-4">Activity 2: Count the Space Candy</h2>
+      <p class="big-text mb-4">The Sweetopia Space Station has a box of candy. Count each type and fill in the table!</p>
+      <div class="candy-box mb-6 p-4">
+        <h3 class="text-center text-xl font-bold text-amber-600 mb-4">Space Candy Box</h3>
+        <div class="flex flex-wrap justify-center">
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍫</div>
+          <div class="candy-item text-4xl">🍬</div>
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍫</div>
+          <div class="candy-item text-4xl">🍬</div>
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍬</div>
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍫</div>
+          <div class="candy-item text-4xl">🍬</div>
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍬</div>
+          <div class="candy-item text-4xl">🍫</div>
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍬</div>
+          <div class="candy-item text-4xl">🍭</div>
+          <div class="candy-item text-4xl">🍫</div>
+          <div class="candy-item text-4xl">🍬</div>
+        </div>
+      </div>
+      <div class="mb-6 bg-pink-50 p-4 rounded-lg">
+        <h3 class="font-bold text-xl text-pink-500 mb-3">Tally Mark Options:</h3>
+        <p class="mb-2">Drag the correct tally marks to each row:</p>
+        <div class="flex flex-wrap justify-center gap-4 mb-4">
+          <div class="tally-option p-2 border-2 border-pink-300 rounded-lg" draggable="true" data-value="5"> <svg width="75" height="30" viewBox="0 0 75 30" preserveAspectRatio="xMidYMid meet">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+            </svg>
+            <p class="text-center text-sm mt-1">5 marks</p>
+          </div>
+          <div class="tally-option p-2 border-2 border-pink-300 rounded-lg" draggable="true" data-value="7"> <svg width="105" height="30" viewBox="0 0 105 30" preserveAspectRatio="xMidYMid meet">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+              <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+              <line x1="90" y1="5" x2="90" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+            <p class="text-center text-sm mt-1">7 marks</p>
+          </div>
+          <div class="tally-option p-2 border-2 border-pink-300 rounded-lg" draggable="true" data-value="8"> <svg width="120" height="30" viewBox="0 0 120 30" preserveAspectRatio="xMidYMid meet">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+              <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+              <line x1="90" y1="5" x2="90" y2="25" stroke="black" stroke-width="3" />
+              <line x1="105" y1="5" x2="105" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+            <p class="text-center text-sm mt-1">8 marks</p>
+          </div>
+        </div>
+      </div>
+      <div class="table-container mb-6">
+        <table class="w-full border-2 border-pink-300">
+          <thead>
+            <tr class="bg-pink-200">
+              <th class="border-2 border-pink-300">Space Candy Type</th>
+              <th class="border-2 border-pink-300">Tally Marks</th>
+              <th class="border-2 border-pink-300">Number</th>
+            </tr>
+          </thead>
+          <tbody class="text-xl">
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🍭</span> <span>Cosmic Lollipops</span> </div>
+              </td>
+              <td class="border-2 border-pink-300">
+                <div class="tally-dropzone p-2 rounded-lg min-h-[60px] flex justify-center items-center" data-row="lollipop" data-value="">
+                  <p class="text-gray-400">Drop tally marks here</p>
+                </div>
+              </td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-pink-100 border-2 border-pink-300 rounded p-2 text-center" id="lollipop-number" placeholder="?"> </td>
+            </tr>
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🍫</span> <span>Asteroid Chocolate</span> </div>
+              </td>
+              <td class="border-2 border-pink-300">
+                <div class="tally-dropzone p-2 rounded-lg min-h-[60px] flex justify-center items-center" data-row="chocolate" data-value="">
+                  <p class="text-gray-400">Drop tally marks here</p>
+                </div>
+              </td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-pink-100 border-2 border-pink-300 rounded p-2 text-center" id="chocolate-number" placeholder="?"> </td>
+            </tr>
+            <tr>
+              <td class="border-2 border-pink-300">
+                <div class="flex items-center justify-center gap-2"> <span class="text-2xl">🍬</span> <span>Alien Gummies</span> </div>
+              </td>
+              <td class="border-2 border-pink-300">
+                <div class="tally-dropzone p-2 rounded-lg min-h-[60px] flex justify-center items-center" data-row="gummy" data-value="">
+                  <p class="text-gray-400">Drop tally marks here</p>
+                </div>
+              </td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-pink-100 border-2 border-pink-300 rounded p-2 text-center" id="gummy-number" placeholder="?"> </td>
+            </tr>
+            <tr class="bg-pink-100">
+              <td class="border-2 border-pink-300 font-bold">Total</td>
+              <td class="border-2 border-pink-300"></td>
+              <td class="border-2 border-pink-300"> <input type="number" class="input-field w-20 bg-pink-100 border-2 border-pink-300 rounded p-2 text-center" id="total-candy" placeholder="?"> </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-center"> <button onclick="checkTable2()" class="btn bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg text-xl font-bold"> Check My Table </button> </div>
+      <div id="table2-feedback" class="mt-4 hidden bg-pink-50 border-2 border-pink-300 rounded-lg p-4 text-center text-xl"></div>
+    </section>
+
+<!-- Activity 3 -->
+<section class="card bg-white p-6 mb-8">
+  <h2 class="text-3xl font-bold text-pink-500 mb-4">Activity 3: Sweetopia Candy Store</h2>
+  <p class="big-text mb-4">The Cosmic Sweet Shop on Planet Sweetopia counted how many pieces of each candy they sold yesterday.</p>
+
+  <div class="table-container mb-6">
+    <table class="w-full border-2 border-pink-300">
+      <thead>
+        <tr class="bg-pink-200">
+          <th class="border-2 border-pink-300">Candy</th>
+          <th class="border-2 border-pink-300">Tally Marks</th>
+          <th class="border-2 border-pink-300">Number Sold</th>
+        </tr>
+      </thead>
+      <tbody class="text-xl">
+        <tr>
+          <td class="border-2 border-pink-300">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-2xl">🍭</span>
+              <span>Space Lollipops</span>
+            </div>
+          </td>
+          <td class="border-2 border-pink-300">
+            <svg width="120" height="30" viewBox="0 0 120 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+              <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+              <line x1="90" y1="5" x2="90" y2="25" stroke="black" stroke-width="3" />
+              <line x1="105" y1="5" x2="105" y2="25" stroke="black" stroke-width="3" />
+              <line x1="120" y1="5" x2="120" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+          </td>
+          <td class="border-2 border-pink-300">9</td>
+        </tr>
+        <tr>
+          <td class="border-2 border-pink-300">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-2xl">🍫</span>
+              <span>Meteor Chocolate</span>
+            </div>
+          </td>
+          <td class="border-2 border-pink-300">
+            <svg width="105" height="30" viewBox="0 0 105 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+              <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+              <line x1="90" y1="5" x2="90" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+          </td>
+          <td class="border-2 border-pink-300">7</td>
+        </tr>
+        <tr>
+          <td class="border-2 border-pink-300">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-2xl">🍬</span>
+              <span>Alien Gummies</span>
+            </div>
+          </td>
+          <td class="border-2 border-pink-300">
+            <svg width="60" height="30" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+          </td>
+          <td class="border-2 border-pink-300">4</td>
+        </tr>
+        <tr class="bg-pink-100">
+          <td class="border-2 border-pink-300 font-bold">Total</td>
+          <td class="border-2 border-pink-300"></td>
+          <td class="border-2 border-pink-300 font-bold">20</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="space-y-6">
+    <div class="bg-pink-50 p-4 rounded-lg">
+      <h3 class="font-bold text-xl text-pink-500 mb-3">Answer these questions:</h3>
+
+      <div class="space-y-6">
+        <div>
+          <p class="mb-2 big-text">1. Which candy sold the most on Sweetopia?</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkAnswer(this, 'Space Lollipops', 'q1')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">Space Lollipops</button>
+            <button onclick="checkAnswer(this, 'Space Lollipops', 'q1')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">Meteor Chocolate</button>
+            <button onclick="checkAnswer(this, 'Space Lollipops', 'q1')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">Alien Gummies</button>
+          </div>
+          <p id="feedback-q1" class="mt-2 hidden text-xl"></p>
+        </div>
+
+        <div>
+          <p class="mb-2 big-text">2. How many more Space Lollipops were sold than Alien Gummies?</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkAnswer(this, '5', 'q2')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">5</button>
+            <button onclick="checkAnswer(this, '5', 'q2')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">3</button>
+            <button onclick="checkAnswer(this, '5', 'q2')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">2</button>
+          </div>
+          <p id="feedback-q2" class="mt-2 hidden text-xl"></p>
+        </div>
+
+        <div>
+          <p class="mb-2 big-text">3. How many space candies were sold in total?</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkAnswer(this, '20', 'q3')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">20</button>
+            <button onclick="checkAnswer(this, '20', 'q3')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">15</button>
+            <button onclick="checkAnswer(this, '20', 'q3')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">10</button>
+          </div>
+          <p id="feedback-q3" class="mt-2 hidden text-xl"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Activity 4 -->
+<section class="card bg-white p-6 mb-8">
+  <h2 class="text-3xl font-bold text-pink-500 mb-4">Activity 4: Galactic Ice Cream Flavors</h2>
+  <p class="big-text mb-4">Captain Frosty asked alien students about their favorite ice cream flavor on Sweetopia.</p>
+
+  <div class="table-container mb-6">
+    <table class="w-full border-2 border-pink-300">
+      <thead>
+        <tr class="bg-pink-200">
+          <th class="border-2 border-pink-300">Ice Cream Flavor</th>
+          <th class="border-2 border-pink-300">Tally Marks</th>
+          <th class="border-2 border-pink-300">Number of Aliens</th>
+        </tr>
+      </thead>
+      <tbody class="text-xl">
+        <tr>
+          <td class="border-2 border-pink-300">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-2xl">🍓</span>
+              <span>Cosmic Strawberry</span>
+            </div>
+          </td>
+          <td class="border-2 border-pink-300">
+            <svg width="75" height="30" viewBox="0 0 75 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+            </svg>
+          </td>
+          <td class="border-2 border-pink-300">5</td>
+        </tr>
+        <tr>
+          <td class="border-2 border-pink-300">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-2xl">🍫</span>
+              <span>Meteor Chocolate</span>
+            </div>
+          </td>
+          <td class="border-2 border-pink-300">
+            <svg width="120" height="30" viewBox="0 0 120 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+              <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+              <line x1="90" y1="5" x2="90" y2="25" stroke="black" stroke-width="3" />
+              <line x1="105" y1="5" x2="105" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+          </td>
+          <td class="border-2 border-pink-300">8</td>
+        </tr>
+        <tr>
+          <td class="border-2 border-pink-300">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-2xl">🍦</span>
+              <span>Milky Way Vanilla</span>
+            </div>
+          </td>
+          <td class="border-2 border-pink-300">
+            <svg width="105" height="30" viewBox="0 0 105 30" preserveAspectRatio="xMidYMid meet" class="mx-auto">
+              <line x1="10" y1="5" x2="10" y2="25" stroke="black" stroke-width="3" />
+              <line x1="25" y1="5" x2="25" y2="25" stroke="black" stroke-width="3" />
+              <line x1="40" y1="5" x2="40" y2="25" stroke="black" stroke-width="3" />
+              <line x1="55" y1="5" x2="55" y2="25" stroke="black" stroke-width="3" />
+              <line x1="5" y1="25" x2="60" y2="5" stroke="black" stroke-width="3" />
+              <line x1="75" y1="5" x2="75" y2="25" stroke="black" stroke-width="3" />
+              <line x1="90" y1="5" x2="90" y2="25" stroke="black" stroke-width="3" />
+            </svg>
+          </td>
+          <td class="border-2 border-pink-300">7</td>
+        </tr>
+        <tr class="bg-pink-100">
+          <td class="border-2 border-pink-300 font-bold">Total</td>
+          <td class="border-2 border-pink-300"></td>
+          <td class="border-2 border-pink-300 font-bold">20</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="space-y-6">
+    <div class="bg-pink-50 p-4 rounded-lg">
+      <h3 class="font-bold text-xl text-pink-500 mb-3">Answer these questions:</h3>
+
+      <div class="space-y-6">
+        <div>
+          <p class="mb-2 big-text">1. Which flavor did the most aliens like?</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkAnswer(this, 'Meteor Chocolate', 'q4')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">Meteor Chocolate</button>
+            <button onclick="checkAnswer(this, 'Meteor Chocolate', 'q4')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">Cosmic Strawberry</button>
+            <button onclick="checkAnswer(this, 'Meteor Chocolate', 'q4')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">Milky Way Vanilla</button>
+          </div>
+          <p id="feedback-q4" class="mt-2 hidden text-xl"></p>
+        </div>
+
+        <div>
+          <p class="mb-2 big-text">2. How many more aliens liked Meteor Chocolate than Cosmic Strawberry?</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkAnswer(this, '3', 'q5')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">3</button>
+            <button onclick="checkAnswer(this, '3', 'q5')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">2</button>
+            <button onclick="checkAnswer(this, '3', 'q5')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">4</button>
+          </div>
+          <p id="feedback-q5" class="mt-2 hidden text-xl"></p>
+        </div>
+
+        <div>
+          <p class="mb-2 big-text">3. How many aliens liked either Milky Way Vanilla or Cosmic Strawberry?</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkAnswer(this, '12', 'q6')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">12</button>
+            <button onclick="checkAnswer(this, '12', 'q6')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">10</button>
+            <button onclick="checkAnswer(this, '12', 'q6')" class="btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-xl">8</button>
+          </div>
+          <p id="feedback-q6" class="mt-2 hidden text-xl"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+    </section> <!-- Summary Section -->
+    <section class="card bg-white p-6">
+      <h2 class="text-3xl font-bold text-pink-500 mb-4">Mission Complete: Data Table Expert!</h2>
+      <div class="flex flex-col md:flex-row items-center gap-6">
+        <div class="md:w-1/3 flex justify-center">
+          <div class="relative"> <span class="text-8xl emoji-float">🏆</span> <span class="absolute -top-4 -right-4 text-4xl emoji-float" style="animation-delay: 0.5s">🚀</span> <span class="absolute -bottom-4 -left-4 text-4xl emoji-float" style="animation-delay: 1s">🍫</span> </div>
+        </div>
+        <div class="md:w-2/3">
+          <div class="bg-pink-50 border-2 border-pink-300 rounded-lg p-6">
+            <h3 class="font-bold text-2xl text-pink-500 mb-3">What We Learned on Planet Sweetopia:</h3>
+            <ul class="list-disc pl-6 space-y-2 big-text">
+              <li>Data tables help us organize information about sweet treats</li>
+              <li>We can use tally marks to count things in space</li>
+              <li>We can compare numbers in a data table</li>
+              <li>We can find the total by adding all the numbers</li>
+            </ul>
+            <div class="mt-6 text-center">
+              <p class="big-text mb-3">You did an amazing job with data tables on Planet Sweetopia!</p>
+              <div class="inline-block bg-pink-500 p-1 rounded-lg">
+                <div class="bg-white rounded-lg p-4">
+                  <p class="text-2xl font-bold text-pink-500">🚀 SWEETOPIA DATA EXPLORER 🍭</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+  window.checkAnswer = function(button, correctAnswer, questionId) {
+    const feedbackElement = document.getElementById(`feedback-${questionId}`);
+    const buttonGroup = button.parentElement.querySelectorAll('button');
+    const selectedAnswer = button.textContent.trim();
+
+    buttonGroup.forEach(btn => {
+      btn.classList.remove('bg-green-500', 'bg-red-500', 'hover:bg-green-600', 'hover:bg-red-600');
+      btn.classList.add('bg-pink-500', 'hover:bg-pink-600');
+    });
+
+    feedbackElement.classList.remove('hidden', 'text-green-600', 'text-red-600');
+
+    if (selectedAnswer === correctAnswer) {
+      button.classList.remove('bg-pink-500', 'hover:bg-pink-600');
+      button.classList.add('bg-green-500', 'hover:bg-green-600');
+      feedbackElement.textContent = "Correct! Great job, space explorer! 🎉";
+      feedbackElement.classList.add('text-green-600', 'font-bold');
+    } else {
+      button.classList.remove('bg-pink-500', 'hover:bg-pink-600');
+      button.classList.add('bg-red-500', 'hover:bg-red-600');
+      feedbackElement.textContent = "Try again! You can do it, cosmic cadet! 🚀";
+      feedbackElement.classList.add('text-red-600', 'font-bold');
+    }
+
+    feedbackElement.classList.remove('hidden');
+  };
+
+  window.checkTable1 = function() {
+    const starCookies = document.getElementById('star-cookies').value;
+    const moonCookies = document.getElementById('moon-cookies').value;
+    const rocketCookies = document.getElementById('rocket-cookies').value;
+    const totalCookies = document.getElementById('total-cookies').value;
+
+    const starTally = document.querySelector('[data-row="star"]').dataset.value || "";
+    const moonTally = document.querySelector('[data-row="moon"]').dataset.value || "";
+    const rocketTally = document.querySelector('[data-row="rocket"]').dataset.value || "";
+
+    const feedbackElement = document.getElementById('table1-feedback');
+    feedbackElement.classList.remove('hidden');
+
+    const numbersCorrect =
+      parseInt(starCookies) === 6 &&
+      parseInt(moonCookies) === 4 &&
+      parseInt(rocketCookies) === 5 &&
+      parseInt(totalCookies) === 15;
+
+    const talliesCorrect =
+      starTally === "6" &&
+      moonTally === "4" &&
+      rocketTally === "5";
+
+    if (starCookies && moonCookies && rocketCookies && totalCookies && starTally && moonTally && rocketTally) {
+      if (numbersCorrect && talliesCorrect) {
+        feedbackElement.innerHTML = `
+          <p class="font-bold text-green-600 mb-2">Amazing job, space explorer! You got them all right! 🚀</p>
+          <p>You're a super Sweetopia data expert!</p>
+        `;
+      } else {
+        feedbackElement.innerHTML = `
+          <p class="font-bold text-yellow-600 mb-2">Almost there! Check your numbers and tally marks!</p>
+          <p>Remember: 6 aliens liked star cookies, 4 liked moon cookies, and 5 liked rocket cookies.</p>
+          <p>Don't forget to add all the numbers to find the total!</p>
+        `;
+      }
+    } else {
+      feedbackElement.innerHTML = `
+        <p class="font-bold text-yellow-600 mb-2">Please fill in all the boxes!</p>
+        <p>We need your help to complete the space cookie table.</p>
+      `;
+    }
+  };
+
+  window.checkTable2 = function() {
+    const lollipopTally = document.querySelector('[data-row="lollipop"]').dataset.value || "";
+    const lollipopNumber = document.getElementById('lollipop-number').value;
+    const chocolateTally = document.querySelector('[data-row="chocolate"]').dataset.value || "";
+    const chocolateNumber = document.getElementById('chocolate-number').value;
+    const gummyTally = document.querySelector('[data-row="gummy"]').dataset.value || "";
+    const gummyNumber = document.getElementById('gummy-number').value;
+    const totalCandy = document.getElementById('total-candy').value;
+
+    const feedbackElement = document.getElementById('table2-feedback');
+    feedbackElement.classList.remove('hidden');
+
+    const numbersCorrect =
+      parseInt(lollipopNumber) === 8 &&
+      parseInt(chocolateNumber) === 5 &&
+      parseInt(gummyNumber) === 7 &&
+      parseInt(totalCandy) === 20;
+
+    const talliesCorrect =
+      lollipopTally === "8" &&
+      chocolateTally === "5" &&
+      gummyTally === "7";
+
+    if (lollipopTally && lollipopNumber && chocolateTally && chocolateNumber && gummyTally && gummyNumber && totalCandy) {
+      if (numbersCorrect && talliesCorrect) {
+        feedbackElement.innerHTML = `
+          <p class="font-bold text-green-600 mb-2">Perfect! Your space candy table is complete! 🚀</p>
+          <p>You counted all the cosmic candy correctly!</p>
+        `;
+      } else if (numbersCorrect) {
+        feedbackElement.innerHTML = `
+          <p class="font-bold text-yellow-600 mb-2">Your numbers are right, but check your tally marks!</p>
+          <p>Make sure your tally marks match your numbers.</p>
+        `;
+      } else {
+        feedbackElement.innerHTML = `
+          <p class="font-bold text-yellow-600 mb-2">Check your counting, space cadet!</p>
+          <p>Count the candy in the space box again. How many of each type do you see?</p>
+          <p>Don't forget to add all the numbers to find the total!</p>
+        `;
+      }
+    } else {
+      feedbackElement.innerHTML = `
+        <p class="font-bold text-yellow-600 mb-2">Please fill in all the boxes!</p>
+        <p>We need your help to complete the space candy table.</p>
+      `;
+    }
+  };
+
+  function createStars() {
+    const body = document.body;
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+
+      const size = Math.random() * 2 + 1;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+
+      const posX = Math.random() * 100;
+      const posY = Math.random() * 100;
+      star.style.left = `${posX}%`;
+      star.style.top = `${posY}%`;
+
+      star.style.animationDelay = `${Math.random() * 2}s`;
+
+      body.appendChild(star);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    createStars();
+
+    let selectedTally = null;
+    const tallyOptions = document.querySelectorAll('.tally-option');
+    const dropzones = document.querySelectorAll('.tally-dropzone');
+
+    tallyOptions.forEach(option => {
+      option.setAttribute('draggable', 'false');
+
+      option.addEventListener('click', function() {
+        tallyOptions.forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedTally = this;
+      });
+    });
+
+    dropzones.forEach(zone => {
+      zone.addEventListener('click', function() {
+        if (!selectedTally) return;
+
+        this.innerHTML = '';
+
+        const clone = selectedTally.cloneNode(true);
+        clone.classList.add('selected');
+        clone.classList.remove('tally-option');
+        clone.removeAttribute('draggable');
+        clone.style.cursor = 'default';
+
+        this.appendChild(clone);
+        this.dataset.value = selectedTally.dataset.value;
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
+    
+  </body>
+  
+</html>
